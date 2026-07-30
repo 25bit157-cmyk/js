@@ -99,41 +99,81 @@ document.getElementById("feedback").innerText = "Correct!"; document.getElementB
 </html> 
 
 3rd PROGRAM - mini text analyzer
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="para">
+    <p id="letter"></p>
+    <p id="word"></p>
+    <p id="sentence"></p>
+    <p id="unique"></p>
+    <p id="occurance"></p>
+    <button onclick="check()">Check</button>
 
-<!DOCTYPE html> 
-<html> 
-<head> 
-<title>Mini Text Analyzer</title> 
-</head> 
-<body> 
-<h2>Mini Text Analyzer</h2> 
-<textarea id="paragraphInput"  placeholder="Enter a paragraph" rows="6" cols="60"></textarea><br> 
-<button onclick="analyzeText()">Analyze</button> <pre id="output"></pre> 
+    <script>
+        function check(){
+            const para1 = document.getElementById("para");
+           const  para = para1.value;
+            
+let lettercount = 0;
 
-<script> 
-function analyzeText() { 
-const text = document.getElementById("paragraphInput").value; 
 
-const totalChars = text.length; 
-const words = text.match(/\b\w+\b/g) || []; const totalWords = words.length; const totalSentences = (text.match(/[.!?]/g) || []).length; 
+for(let i=0;i<para.length;i++){
+    if(para[i]!=" " && para[i]!='.'){
+        lettercount++;
+    }
+}
+document.getElementById("letter").innerHTML="Letter Count: "+lettercount;
+let word  = para.split(" ");
+document.getElementById("word").innerHTML="Word Count: "+word.length;
+let sentence = para.split(".");
+document.getElementById("sentence").innerHTML="Sentence Count: "+(sentence.length-1);
+let newWord=[];
+for(let i=0;i<word.length;i++){
+    let val = word[i];
+    let val1 = val.toLowerCase();
+    let val2 = val1.replace(".","");
+    newWord[i] = val2;
+}
+console.log(newWord);
+let uniquearr=[];
+let countarr=[];
+let index = 0;
+for(let i=0;i<newWord.length;i++){
+    let isDup=true;
+    for(let k=0;k<i;k++){
+        if(newWord[i] == newWord[k]){
+            isDup = false;
+        }
+    }
+    if(isDup){
+        let count =1;
+        for(let j=i+1;j<newWord.length;j++){
+            if(newWord[i] == newWord[j]){
+                count++;
+            }
+        }
+        uniquearr[index] = newWord[i];
+        countarr[index] = count;
+        index++;
+        
+    }
+    
+}
 
-const uniqueWords = [...new Set(words.map(w => w.toLowerCase()))]; 
+for(data of uniquearr){
+    document.getElementById("unique").innerHTML+=data+",";
+}
 
-const freq = {}; 
-words.forEach(word => { 
-const w = word.toLowerCase(); 
-freq[w] = (freq[w] || 0) + 1; }); 
-
-const sortedFreq = Object.entries(freq).sort((a, b) => b[1] - a[1]); 
-const output = ` 
-Total Characters: ${totalChars} 
-Total Words: ${totalWords} 
-Total Sentences: ${totalSentences} 
-Unique Words: ${uniqueWords.join(", ")} 
-Word Frequency: rows="6" ${sortedFreq.map(([word, count]) => word + ": " + count).join("\n")} 
-`; 
-document.getElementById("output").textContent = output; 
-} 
-</script> 
-</body> 
+for(let i=0;i<countarr.length;i++){
+   document.getElementById("occurance").innerHTML+="<p>"+uniquearr[i]+":"+countarr[i]+"</p>";
+}
+        }
+    </script>
+</body>
 </html>
